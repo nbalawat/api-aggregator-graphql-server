@@ -1,0 +1,102 @@
+# Account Queries
+
+# Get a single account by ID
+query GetAccount {
+  account(id: "1") {
+    id
+    customerId
+    accountNumber
+    type
+    status
+    balance
+    currency
+    openDate
+    lastActivityDate
+  }
+}
+
+# Get an account with its customer details
+query GetAccountWithCustomer {
+  account(id: "1") {
+    id
+    accountNumber
+    type
+    status
+    balance
+    currency
+    customer {
+      id
+      firstName
+      lastName
+      email
+      status
+    }
+  }
+}
+
+# Get an account with its transactions
+query GetAccountWithTransactions {
+  account(id: "1") {
+    id
+    accountNumber
+    type
+    balance
+    currency
+    transactions(limit: 5) {
+      id
+      transactionId
+      type
+      amount
+      currency
+      status
+      date
+      description
+    }
+  }
+}
+
+# Get accounts by type
+query GetAccountsByType {
+  accounts(type: CHECKING) {
+    id
+    accountNumber
+    type
+    status
+    balance
+    currency
+    customer {
+      firstName
+      lastName
+    }
+  }
+}
+
+# Create a new account
+mutation CreateAccount {
+  createAccount(
+    customerId: "1"
+    type: SAVINGS
+    currency: "USD"
+    initialDeposit: 1000
+  ) {
+    id
+    accountNumber
+    type
+    status
+    balance
+    currency
+    openDate
+  }
+}
+
+# Update an account's status
+mutation UpdateAccountStatus {
+  updateAccountStatus(
+    accountId: "1"
+    status: INACTIVE
+  ) {
+    id
+    accountNumber
+    status
+  }
+}

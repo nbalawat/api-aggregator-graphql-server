@@ -1,0 +1,111 @@
+# Customer Queries
+
+# Get a single customer by ID
+query GetCustomer {
+  customer(id: "1") {
+    id
+    firstName
+    lastName
+    email
+    phone
+    address {
+      street
+      city
+      state
+      zipCode
+      country
+    }
+    dateOfBirth
+    joinDate
+    status
+  }
+}
+
+# Get a customer with their accounts
+query GetCustomerWithAccounts {
+  customer(id: "1") {
+    id
+    firstName
+    lastName
+    email
+    status
+    accounts {
+      id
+      accountNumber
+      type
+      status
+      balance
+      currency
+      openDate
+    }
+  }
+}
+
+# Get a customer with their transactions
+query GetCustomerWithTransactions {
+  customer(id: "1") {
+    id
+    firstName
+    lastName
+    email
+    transactions(limit: 5) {
+      id
+      transactionId
+      type
+      amount
+      currency
+      status
+      date
+      description
+    }
+  }
+}
+
+# Get all customers with a specific status
+query GetActiveCustomers {
+  customers(status: ACTIVE) {
+    id
+    firstName
+    lastName
+    email
+    status
+    joinDate
+  }
+}
+
+# Create a new customer
+mutation CreateCustomer {
+  createCustomer(
+    firstName: "Alex"
+    lastName: "Thompson"
+    email: "alex@example.com"
+    phone: "555-111-2222"
+    address: {
+      street: "123 Elm St"
+      city: "Seattle"
+      state: "WA"
+      zipCode: "98101"
+      country: "USA"
+    }
+  ) {
+    id
+    firstName
+    lastName
+    email
+    status
+    joinDate
+  }
+}
+
+# Update a customer's status
+mutation UpdateCustomerStatus {
+  updateCustomerStatus(
+    customerId: "1"
+    status: INACTIVE
+  ) {
+    id
+    firstName
+    lastName
+    status
+  }
+}

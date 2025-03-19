@@ -1,0 +1,130 @@
+# Transaction Queries
+
+# Get a single transaction by ID
+query GetTransaction {
+  transaction(id: "1") {
+    id
+    transactionId
+    customerId
+    accountId
+    type
+    amount
+    currency
+    status
+    date
+    description
+    reference
+  }
+}
+
+# Get a transaction with related customer and account
+query GetTransactionWithRelations {
+  transaction(id: "1") {
+    id
+    transactionId
+    type
+    amount
+    currency
+    status
+    date
+    description
+    customer {
+      id
+      firstName
+      lastName
+    }
+    account {
+      id
+      accountNumber
+      type
+    }
+  }
+}
+
+# Get transactions for a specific customer
+query GetCustomerTransactions {
+  transactions(customerId: "1", limit: 10) {
+    id
+    transactionId
+    type
+    amount
+    currency
+    status
+    date
+    description
+    account {
+      accountNumber
+      type
+    }
+  }
+}
+
+# Get transactions for a specific account
+query GetAccountTransactions {
+  transactions(accountId: "1", limit: 10) {
+    id
+    transactionId
+    type
+    amount
+    currency
+    status
+    date
+    description
+  }
+}
+
+# Get transactions by type
+query GetTransactionsByType {
+  transactions(type: DEPOSIT, limit: 5) {
+    id
+    transactionId
+    amount
+    currency
+    date
+    customer {
+      firstName
+      lastName
+    }
+    account {
+      accountNumber
+    }
+  }
+}
+
+# Get transactions by date range
+query GetTransactionsByDateRange {
+  transactions(
+    startDate: "2023-01-01"
+    endDate: "2023-01-31"
+    limit: 10
+  ) {
+    id
+    transactionId
+    type
+    amount
+    currency
+    status
+    date
+    description
+  }
+}
+
+# Process a payment
+mutation ProcessPayment {
+  processPayment(
+    customerId: "1"
+    accountId: "1"
+    amount: 250.00
+    currency: "USD"
+    description: "Monthly subscription"
+    reference: "SUB-12345"
+  ) {
+    id
+    transactionId
+    type
+    amount
+    status
+    date
+    description
+  }
+}

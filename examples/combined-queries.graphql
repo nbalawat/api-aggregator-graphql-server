@@ -1,0 +1,133 @@
+# Combined Queries
+
+# Dashboard view combining customer, accounts, and transactions
+query DashboardView {
+  customer(id: "1") {
+    firstName
+    lastName
+    email
+    status
+    accounts {
+      id
+      accountNumber
+      type
+      balance
+      currency
+    }
+    transactions(limit: 5) {
+      date
+      type
+      amount
+      description
+    }
+  }
+  
+  recentTransactions: transactions(limit: 10) {
+    id
+    date
+    amount
+    type
+    customer {
+      firstName
+      lastName
+    }
+  }
+}
+
+# Search across multiple entity types
+query SearchAcrossEntities {
+  search(query: "michael") {
+    ... on Customer {
+      id
+      firstName
+      lastName
+      email
+    }
+    ... on User {
+      id
+      name
+      email
+    }
+    ... on Product {
+      id
+      name
+      price
+    }
+  }
+}
+
+# Get financial summary for a customer
+query CustomerFinancialSummary {
+  customer(id: "1") {
+    firstName
+    lastName
+    
+    checkingAccounts: accounts(type: CHECKING) {
+      accountNumber
+      balance
+      currency
+    }
+    
+    savingsAccounts: accounts(type: SAVINGS) {
+      accountNumber
+      balance
+      currency
+    }
+    
+    recentDeposits: transactions(type: DEPOSIT, limit: 3) {
+      date
+      amount
+      description
+    }
+    
+    recentWithdrawals: transactions(type: WITHDRAWAL, limit: 3) {
+      date
+      amount
+      description
+    }
+  }
+}
+
+# Complete customer profile with all related data
+query CompleteCustomerProfile {
+  customer(id: "1") {
+    id
+    firstName
+    lastName
+    email
+    phone
+    address {
+      street
+      city
+      state
+      zipCode
+      country
+    }
+    dateOfBirth
+    joinDate
+    status
+    
+    accounts {
+      id
+      accountNumber
+      type
+      status
+      balance
+      currency
+      openDate
+      lastActivityDate
+    }
+    
+    transactions(limit: 10) {
+      id
+      transactionId
+      type
+      amount
+      currency
+      status
+      date
+      description
+      reference
+    }
+  }
+}
